@@ -1,0 +1,213 @@
+{
+  "grid-core.js" : [ {
+    "id" : "core_intro",
+    "line" : 1,
+    "preview" : "// @anchor: core_intro"
+  }, {
+    "id" : "core_config",
+    "line" : 14,
+    "preview" : "// @anchor: core_config"
+  }, {
+    "id" : "core_config_end",
+    "line" : 19,
+    "preview" : "// @anchor: core_config_end"
+  }, {
+    "id" : "core_create",
+    "line" : 21,
+    "preview" : "// @anchor: core_create"
+  }, {
+    "id" : "core_create_end",
+    "line" : 34,
+    "preview" : "// @anchor: core_create_end"
+  }, {
+    "id" : "core_query",
+    "line" : 36,
+    "preview" : "// @anchor: core_query"
+  }, {
+    "id" : "core_query_end",
+    "line" : 46,
+    "preview" : "// @anchor: core_query_end"
+  }, {
+    "id" : "core_ops",
+    "line" : 48,
+    "preview" : "// @anchor: core_ops"
+  }, {
+    "id" : "core_ops_end",
+    "line" : 101,
+    "preview" : "// @anchor: core_ops_end"
+  }, {
+    "id" : "core_serialize",
+    "line" : 103,
+    "preview" : "// @anchor: core_serialize"
+  }, {
+    "id" : "core_serialize_end",
+    "line" : 132,
+    "preview" : "// @anchor: core_serialize_end"
+  } ],
+  "index.html" : [ {
+    "id" : "html_intro",
+    "line" : 7,
+    "preview" : "<!-- @anchor: html_intro -->"
+  }, {
+    "id" : "html_toolbar",
+    "line" : 18,
+    "preview" : "<!-- @anchor: html_toolbar -->"
+  }, {
+    "id" : "html_toolbar_end",
+    "line" : 35,
+    "preview" : "<!-- @anchor: html_toolbar_end -->"
+  }, {
+    "id" : "html_grid",
+    "line" : 37,
+    "preview" : "<!-- @anchor: html_grid -->"
+  }, {
+    "id" : "html_grid_end",
+    "line" : 42,
+    "preview" : "<!-- @anchor: html_grid_end -->"
+  }, {
+    "id" : "html_legend",
+    "line" : 44,
+    "preview" : "<!-- @anchor: html_legend -->"
+  }, {
+    "id" : "html_legend_end",
+    "line" : 54,
+    "preview" : "<!-- @anchor: html_legend_end -->"
+  } ],
+  "PROJECT.md" : [ {
+    "id" : "project_intro",
+    "line" : 1,
+    "preview" : "<!-- @anchor: project_intro -->"
+  } ],
+  "script.js" : [ {
+    "id" : "script_intro",
+    "line" : 1,
+    "preview" : "// @anchor: script_intro"
+  }, {
+    "id" : "script_config",
+    "line" : 4,
+    "preview" : "// @anchor: script_config"
+  }, {
+    "id" : "script_config_end",
+    "line" : 20,
+    "preview" : "// @anchor: script_config_end"
+  }, {
+    "id" : "script_state",
+    "line" : 22,
+    "preview" : "// @anchor: script_state"
+  }, {
+    "id" : "script_state_end",
+    "line" : 33,
+    "preview" : "// @anchor: script_state_end"
+  }, {
+    "id" : "script_build",
+    "line" : 35,
+    "preview" : "// @anchor: script_build"
+  }, {
+    "id" : "script_build_end",
+    "line" : 83,
+    "preview" : "// @anchor: script_build_end"
+  }, {
+    "id" : "script_render",
+    "line" : 85,
+    "preview" : "// @anchor: script_render"
+  }, {
+    "id" : "script_render_end",
+    "line" : 112,
+    "preview" : "// @anchor: script_render_end"
+  }, {
+    "id" : "script_ops",
+    "line" : 114,
+    "preview" : "// @anchor: script_ops"
+  }, {
+    "id" : "script_ops_end",
+    "line" : 125,
+    "preview" : "// @anchor: script_ops_end"
+  }, {
+    "id" : "script_input",
+    "line" : 127,
+    "preview" : "// @anchor: script_input"
+  }, {
+    "id" : "script_input_end",
+    "line" : 225,
+    "preview" : "// @anchor: script_input_end"
+  }, {
+    "id" : "script_mode",
+    "line" : 227,
+    "preview" : "// @anchor: script_mode"
+  }, {
+    "id" : "script_mode_end",
+    "line" : 248,
+    "preview" : "// @anchor: script_mode_end"
+  }, {
+    "id" : "script_storage",
+    "line" : 250,
+    "preview" : "// @anchor: script_storage"
+  }, {
+    "id" : "script_storage_end",
+    "line" : 301,
+    "preview" : "// @anchor: script_storage_end"
+  }, {
+    "id" : "script_init",
+    "line" : 303,
+    "preview" : "// @anchor: script_init"
+  }, {
+    "id" : "script_init_end",
+    "line" : 319,
+    "preview" : "// @anchor: script_init_end"
+  } ],
+  "selftest-core.js" : [ {
+    "id" : "selftest_intro",
+    "line" : 1,
+    "preview" : "// @anchor: selftest_intro"
+  } ],
+  "style.css" : [ {
+    "id" : "style_intro",
+    "line" : 1,
+    "preview" : "/* @anchor: style_intro */"
+  }, {
+    "id" : "style_base",
+    "line" : 4,
+    "preview" : "/* @anchor: style_base */"
+  }, {
+    "id" : "style_base_end",
+    "line" : 45,
+    "preview" : "/* @anchor: style_base_end */"
+  }, {
+    "id" : "style_toolbar",
+    "line" : 47,
+    "preview" : "/* @anchor: style_toolbar */"
+  }, {
+    "id" : "style_toolbar_end",
+    "line" : 68,
+    "preview" : "/* @anchor: style_toolbar_end */"
+  }, {
+    "id" : "style_grid",
+    "line" : 70,
+    "preview" : "/* @anchor: style_grid */"
+  }, {
+    "id" : "style_grid_end",
+    "line" : 132,
+    "preview" : "/* @anchor: style_grid_end */"
+  }, {
+    "id" : "style_legend",
+    "line" : 134,
+    "preview" : "/* @anchor: style_legend */"
+  }, {
+    "id" : "style_legend_end",
+    "line" : 155,
+    "preview" : "/* @anchor: style_legend_end */"
+  } ],
+  "UPDATE.md" : [ {
+    "id" : "update_intro",
+    "line" : 1,
+    "preview" : "<!-- @anchor: update_intro -->"
+  }, {
+    "id" : "update_v1",
+    "line" : 6,
+    "preview" : "<!-- @anchor: update_v1 -->"
+  }, {
+    "id" : "update_tail",
+    "line" : 20,
+    "preview" : "<!-- @anchor: update_tail -->"
+  } ]
+}

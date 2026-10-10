@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cheryl's Birthday · 网格推理助手</title>
+<!-- @anchor: html_intro -->
+<!-- 单页外壳：工具栏（模式/操作）+ 8×8 网格容器 + 图例与状态条，逻辑见 script.js -->
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="app-header">
+  <h1>Cheryl's Birthday 网格推理助手</h1>
+  <p class="subtitle">8×8 · 黑白涂色定题面 · 行列叠加选中 · 黄色目标高亮</p>
+</header>
+
+<main class="app-main">
+  <!-- @anchor: html_toolbar -->
+  <!-- 模式切换与操作按钮组，行为由 script.js 绑定 -->
+  <section class="toolbar" aria-label="工具栏">
+    <div class="tool-group" role="group" aria-label="模式">
+      <button class="mode-btn active" type="button" data-mode="paint">涂色</button>
+      <button class="mode-btn" type="button" data-mode="select">选中</button>
+      <button class="mode-btn" type="button" data-mode="erase">消除</button>
+      <button class="mode-btn" type="button" data-mode="target">目标</button>
+    </div>
+    <div class="tool-group" role="group" aria-label="操作">
+      <button class="action-btn primary" type="button" id="btn-save">保存</button>
+      <button class="action-btn" type="button" id="btn-load">载入</button>
+      <button class="action-btn" type="button" id="btn-clear-sel">清空选中</button>
+      <button class="action-btn" type="button" id="btn-clear-target">清空目标</button>
+      <button class="action-btn" type="button" id="btn-reset">重置全部</button>
+    </div>
+  </section>
+  <!-- @anchor: html_toolbar_end -->
+
+  <!-- @anchor: html_grid -->
+  <!-- 9×9 网格容器（角落 + 8 列标签 + 8 行标签 + 64 单元格），由 script.js 构建 -->
+  <section class="grid-area">
+    <div class="grid" id="grid" data-mode="paint" role="grid" aria-label="8×8 推理网格"></div>
+  </section>
+  <!-- @anchor: html_grid_end -->
+
+  <!-- @anchor: html_legend -->
+  <!-- 颜色图例与状态提示条 -->
+  <section class="legend" aria-label="图例">
+    <span><i class="swatch black"></i>涂黑（题面）</span>
+    <span><i class="swatch white"></i>涂白（题面）</span>
+    <span><i class="swatch sel"></i>选中（辅助）</span>
+    <span><i class="swatch target"></i>目标（黄色）</span>
+  </section>
+
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+  <!-- @anchor: html_legend_end -->
+</main>
+
+<script src="grid-core.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+{
+  "grid-core.js" : [ {
+    "id" : "core_intro",
+    "line" : 1,
+    "desc" : "纯逻辑内核：8×8 网格三层状态（color / sel / target）与选中并集、目标约束、序列化。",
+    "symbol" : "createState"
+  }, {
+    "id" : "core_config",
+    "line" : 14,
+    "desc" : "尺寸与颜色常量",
+    "symbol" : "createState"
+  }, {
+    "id" : "core_config_end",
+    "line" : 19,
+    "desc" : "",
+    "symbol" : "createState"
+  }, {
+    "id" : "core_create",
+    "line" : 21,
+    "desc" : "创建初始状态：全黑、无选中、无目标",
+    "symbol" : "createState"
+  }, {
+    "id" : "core_create_end",
+    "line" : 34,
+    "desc" : "",
+    "symbol" : "isRowAllSelected"
+  }, {
+    "id" : "core_query",
+    "line" : 36,
+    "desc" : "行 / 列是否已整行、整列被选中（驱动坐标头激活态与切换判断）",
+    "symbol" : "isRowAllSelected"
+  }, {
+    "id" : "core_query_end",
+    "line" : 46,
+    "desc" : "",
+    "symbol" : "setColor"
+  }, {
+    "id" : "core_ops",
+    "line" : 48,
+    "desc" : "单格与整行/整列操作；返回是否实际变更，调用方据此决定重绘范围。",
+    "symbol" : "setColor"
+  }, {
+    "id" : "core_ops_end",
+    "line" : 101,
+    "desc" : "",
+    "symbol" : "serialize"
+  }, {
+    "id" : "core_serialize",
+    "line" : 103,
+    "desc" : "序列化 / 反序列化：紧凑三元组 [是否白, 是否选中, 是否目标]；非法数据返回 null。",
+    "symbol" : "serialize"
+  }, {
+    "id" : "core_serialize_end",
+    "line" : 132,
+    "desc" : ""
+  } ],
+  "index.html" : [ {
+    "id" : "html_intro",
+    "line" : 7,
+    "desc" : "单页外壳：工具栏（模式/操作）+ 8×8 网格容器 + 图例与状态条，逻辑见 script.js"
+  }, {
+    "id" : "html_toolbar",
+    "line" : 18,
+    "desc" : "模式切换与操作按钮组，行为由 script.js 绑定"
+  }, {
+    "id" : "html_toolbar_end",
+    "line" : 35,
+    "desc" : ""
+  }, {
+    "id" : "html_grid",
+    "line" : 37,
+    "desc" : "9×9 网格容器（角落 + 8 列标签 + 8 行标签 + 64 单元格），由 script.js 构建"
+  }, {
+    "id" : "html_grid_end",
+    "line" : 42,
+    "desc" : ""
+  }, {
+    "id" : "html_legend",
+    "line" : 44,
+    "desc" : "颜色图例与状态提示条"
+  }, {
+    "id" : "html_legend_end",
+    "line" : 54,
+    "desc" : ""
+  } ],
+  "PROJECT.md" : [ {
+    "id" : "project_intro",
+    "line" : 1,
+    "desc" : "项目定位与架构说明：Cheryl's Birthday 8×8 网格推理辅助工具。"
+  } ],
+  "script.js" : [ {
+    "id" : "script_intro",
+    "line" : 1,
+    "desc" : "交互层：把 grid-core.js 的纯状态映射到 DOM，处理模式化指针手势与 localStorage 持久化。",
+    "symbol" : "buildGrid"
+  }, {
+    "id" : "script_config",
+    "line" : 4,
+    "desc" : "常量与状态提示文案；内核引用来自 grid-core.js",
+    "symbol" : "buildGrid"
+  }, {
+    "id" : "script_config_end",
+    "line" : 20,
+    "desc" : "",
+    "symbol" : "buildGrid"
+  }, {
+    "id" : "script_state",
+    "line" : 22,
+    "desc" : "运行时状态：单元格二维数组（唯一数据源）+ 当前模式 + 手势上下文 + DOM 缓存",
+    "symbol" : "buildGrid"
+  }, {
+    "id" : "script_state_end",
+    "line" : 33,
+    "desc" : "",
+    "symbol" : "buildGrid"
+  }, {
+    "id" : "script_build",
+    "line" : 35,
+    "desc" : "构建网格 DOM：角落 + 列标签(数字) + 每行(行标签字母 + 单元格)，并缓存引用",
+    "symbol" : "buildGrid"
+  }, {
+    "id" : "script_build_end",
+    "line" : 83,
+    "desc" : "",
+    "symbol" : "renderAll"
+  }, {
+    "id" : "script_render",
+    "line" : 85,
+    "desc" : "状态 → 视图：刷新单元格三态样式与行 / 列标签激活态",
+    "symbol" : "renderAll"
+  }, {
+    "id" : "script_render_end",
+    "line" : 112,
+    "desc" : "",
+    "symbol" : "paintCell"
+  }, {
+    "id" : "script_ops",
+    "line" : 114,
+    "desc" : "视图层原子操作：调用内核改状态后，仅重绘受影响的单个单元格",
+    "symbol" : "paintCell"
+  }, {
+    "id" : "script_ops_end",
+    "line" : 125,
+    "desc" : "",
+    "symbol" : "hitCellFromPoint"
+  }, {
+    "id" : "script_input",
+    "line" : 127,
+    "desc" : "指针手势：按下命中行/列标签或单元格，拖动用 elementFromPoint 命中格，按模式分派",
+    "symbol" : "hitCellFromPoint"
+  }, {
+    "id" : "script_input_end",
+    "line" : 225,
+    "desc" : "",
+    "symbol" : "setMode"
+  }, {
+    "id" : "script_mode",
+    "line" : 227,
+    "desc" : "模式切换与状态提示条",
+    "symbol" : "setMode"
+  }, {
+    "id" : "script_mode_end",
+    "line" : 248,
+    "desc" : "",
+    "symbol" : "saveState"
+  }, {
+    "id" : "script_storage",
+    "line" : 250,
+    "desc" : "localStorage 持久化：保存 / 载入 / 清空，并绑定工具栏按钮",
+    "symbol" : "saveState"
+  }, {
+    "id" : "script_storage_end",
+    "line" : 301,
+    "desc" : "",
+    "symbol" : "init"
+  }, {
+    "id" : "script_init",
+    "line" : 303,
+    "desc" : "初始化：构建网格、绑定事件、载入本地存档",
+    "symbol" : "init"
+  }, {
+    "id" : "script_init_end",
+    "line" : 319,
+    "desc" : ""
+  } ],
+  "selftest-core.js" : [ {
+    "id" : "selftest_intro",
+    "line" : 1,
+    "desc" : "内核自测：验证 grid-core.js 的三层状态、选中并集、目标约束与序列化。",
+    "symbol" : "test"
+  } ],
+  "style.css" : [ {
+    "id" : "style_intro",
+    "line" : 1,
+    "desc" : "网格推理助手样式：暗色黑白格 + 蓝色选中环 + 黄色目标高亮，浅色主题",
+    "symbol" : ":root"
+  }, {
+    "id" : "style_base",
+    "line" : 4,
+    "desc" : "主题变量与基础布局",
+    "symbol" : ":root"
+  }, {
+    "id" : "style_base_end",
+    "line" : 45,
+    "desc" : "",
+    "symbol" : ".tool-group"
+  }, {
+    "id" : "style_toolbar",
+    "line" : 47,
+    "desc" : "工具栏：模式切换组 + 操作按钮组",
+    "symbol" : ".tool-group"
+  }, {
+    "id" : "style_toolbar_end",
+    "line" : 68,
+    "desc" : "",
+    "symbol" : ".grid"
+  }, {
+    "id" : "style_grid",
+    "line" : 70,
+    "desc" : "9×9 网格布局与单元格三态（黑白 / 选中 / 目标）样式",
+    "symbol" : ".grid"
+  }, {
+    "id" : "style_grid_end",
+    "line" : 132,
+    "desc" : "",
+    "symbol" : ".legend"
+  }, {
+    "id" : "style_legend",
+    "line" : 134,
+    "desc" : "图例与状态提示条",
+    "symbol" : ".legend"
+  }, {
+    "id" : "style_legend_end",
+    "line" : 155,
+    "desc" : ""
+  } ],
+  "UPDATE.md" : [ {
+    "id" : "update_intro",
+    "line" : 1,
+    "desc" : "更新日志（最新在上）。新纪录请插入到末尾锚点 update_tail 之前（position=before）。"
+  }, {
+    "id" : "update_v1",
+    "line" : 6,
+    "desc" : "v1 · 首个可用版本"
+  }, {
+    "id" : "update_tail",
+    "line" : 20,
+    "desc" : "末尾锚点：请在锚点之前插入新纪录（position=before）"
+  } ]
+}
