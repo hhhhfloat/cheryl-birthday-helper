@@ -33,6 +33,7 @@
   }
   // @anchor: core_create_end
 
+
   // @anchor: core_query
   // 行 / 列是否已整行、整列被选中（驱动坐标头激活态与切换判断）
   function isRowAllSelected(cells, r) {

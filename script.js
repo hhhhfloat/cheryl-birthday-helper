@@ -13,14 +13,17 @@ var MODES = ['paint', 'select', 'erase', 'target'];
 var STORAGE_KEY = 'cheryl-birthday-helper/v1';
 var MODE_HINTS = {
   paint: '涂色：点击或拖动格子，黑 / 白循环切换',
-  select: '选中：点击行 / 列标签选中整行 / 整列，效果叠加；按住鼠标右键拖动可擦除选中',
+  select: '选中：点击 / 拖动格子任意选中（叠加行 / 列标签），按住鼠标右键拖动可擦除',
   erase: '消除：点击行 / 列标签或拖动格子取消选中',
   target: '目标：点击或拖动白色格子，用黄色标出目标'
 };
 
+
 // @anchor: script_config_end
 
 // @anchor: script_state
+var brushSel = null;
+
 // 运行时状态：单元格二维数组（唯一数据源）+ 当前模式 + 手势上下文 + DOM 缓存
 var cells = Core.createState();
 var mode = 'paint';
@@ -129,7 +132,8 @@ function markTarget(r, c, value) {
 
 // @anchor: script_input
 // 指针手势：按下命中行 / 列标签或单元格，拖动用 elementFromPoint 命中格，按模式分派；
-// 选中模式下按鼠标右键按下 → 本次手势临时转为擦除（取消选中）
+// 选中模式既可点击 / 拖动格子任意选中（以按下格的反相为画笔，拖动连续涂选），也可点行 / 列标签；
+// 选中 (或消除) 模式下按鼠标右键 → 本次手势临时转为擦除（取消选中）
 function hitCellFromPoint(x, y) {
   var el = document.elementFromPoint(x, y);
   if (!el) return null;
@@ -147,6 +151,10 @@ function applyCellDown(r, c) {
     brushColor = st.color === BLACK ? WHITE : BLACK;
     paintCell(r, c, brushColor);
     pointerActive = true;
+  } else if (mode === 'select') {
+    brushSel = !st.sel;
+    selectCell(r, c, brushSel);
+    pointerActive = true;
   } else if (mode === 'target') {
     if (st.color !== WHITE) { status('仅白色格子可标记为目标'); return; }
     brushTarget = !st.target;
@@ -158,7 +166,7 @@ function applyCellDown(r, c) {
 function onPointerDown(e) {
   var rightButton = (e.pointerType === 'mouse' && e.button === 2);
   var leftButton = (e.pointerType !== 'mouse') || e.button === 0;
-  var rightErase = rightButton && mode === 'select';
+  var rightErase = rightButton && (mode === 'select' || mode === 'erase');
   if (!leftButton && !rightErase) return;
   gestureErase = (mode === 'erase') || rightErase;
 
@@ -190,6 +198,7 @@ function onPointerMove(e) {
   if (!hit) return;
   if (gestureErase) selectCell(hit.r, hit.c, false);
   else if (mode === 'paint' && brushColor) paintCell(hit.r, hit.c, brushColor);
+  else if (mode === 'select' && brushSel !== null) selectCell(hit.r, hit.c, brushSel);
   else if (mode === 'target' && brushTarget !== null) markTarget(hit.r, hit.c, brushTarget);
 }
 
@@ -198,6 +207,7 @@ function onPointerUp(e) {
   pointerActive = false;
   gestureErase = false;
   brushColor = null;
+  brushSel = null;
   brushTarget = null;
   renderLabels();
   var grid = document.getElementById('grid');
@@ -235,6 +245,7 @@ function bindPointerEvents() {
   window.addEventListener('pointerup', onPointerUp);
   window.addEventListener('pointercancel', onPointerUp);
 }
+
 
 // @anchor: script_input_end
 

@@ -26,32 +26,32 @@
     "symbol" : "isRowAllSelected"
   }, {
     "id" : "core_query",
-    "line" : 36,
+    "line" : 37,
     "desc" : "行 / 列是否已整行、整列被选中（驱动坐标头激活态与切换判断）",
     "symbol" : "isRowAllSelected"
   }, {
     "id" : "core_query_end",
-    "line" : 46,
+    "line" : 47,
     "desc" : "",
     "symbol" : "setColor"
   }, {
     "id" : "core_ops",
-    "line" : 48,
+    "line" : 49,
     "desc" : "单格与整行/整列操作；返回是否实际变更，调用方据此决定重绘范围。",
     "symbol" : "setColor"
   }, {
     "id" : "core_ops_end",
-    "line" : 101,
+    "line" : 102,
     "desc" : "",
     "symbol" : "serialize"
   }, {
     "id" : "core_serialize",
-    "line" : 103,
+    "line" : 104,
     "desc" : "序列化 / 反序列化：紧凑三元组 [是否白, 是否选中, 是否目标]；非法数据返回 null。",
     "symbol" : "serialize"
   }, {
     "id" : "core_serialize_end",
-    "line" : 132,
+    "line" : 133,
     "desc" : ""
   } ],
   "index.html" : [ {
@@ -80,13 +80,37 @@
     "desc" : "颜色图例与状态提示条"
   }, {
     "id" : "html_legend_end",
-    "line" : 55,
+    "line" : 56,
     "desc" : ""
   } ],
   "PROJECT.md" : [ {
     "id" : "project_intro",
     "line" : 1,
     "desc" : "项目定位与架构说明：Cheryl's Birthday 8×8 网格推理辅助工具。"
+  }, {
+    "id" : "project_layers",
+    "line" : 8,
+    "desc" : "三层状态模型与设计决策——修改内核语义前必读"
+  }, {
+    "id" : "project_interaction",
+    "line" : 25,
+    "desc" : "交互约定：模式、坐标头、指针手势"
+  }, {
+    "id" : "project_storage",
+    "line" : 32,
+    "desc" : "持久化约定：键名、保存范围、入口"
+  }, {
+    "id" : "project_testing",
+    "line" : 38,
+    "desc" : "测试与运行方式"
+  }, {
+    "id" : "project_files",
+    "line" : 45,
+    "desc" : "文件清单"
+  }, {
+    "id" : "project_tail",
+    "line" : 52,
+    "desc" : "末尾锚点：新增章节请插入到此处之前（position=before）"
   } ],
   "script.js" : [ {
     "id" : "script_intro",
@@ -100,87 +124,87 @@
     "symbol" : "buildGrid"
   }, {
     "id" : "script_config_end",
-    "line" : 21,
+    "line" : 22,
     "desc" : "",
     "symbol" : "buildGrid"
   }, {
     "id" : "script_state",
-    "line" : 23,
-    "desc" : "运行时状态：单元格二维数组（唯一数据源）+ 当前模式 + 手势上下文 + DOM 缓存",
+    "line" : 24,
+    "desc" : "",
     "symbol" : "buildGrid"
   }, {
     "id" : "script_state_end",
-    "line" : 36,
+    "line" : 39,
     "desc" : "",
     "symbol" : "buildGrid"
   }, {
     "id" : "script_build",
-    "line" : 38,
+    "line" : 41,
     "desc" : "构建网格 DOM：角落 + 列标签(数字) + 每行(行标签字母 + 单元格)，并缓存引用",
     "symbol" : "buildGrid"
   }, {
     "id" : "script_build_end",
-    "line" : 86,
+    "line" : 89,
     "desc" : "",
     "symbol" : "renderAll"
   }, {
     "id" : "script_render",
-    "line" : 88,
+    "line" : 91,
     "desc" : "状态 → 视图：刷新单元格三态样式与行 / 列标签激活态",
     "symbol" : "renderAll"
   }, {
     "id" : "script_render_end",
-    "line" : 115,
+    "line" : 118,
     "desc" : "",
     "symbol" : "paintCell"
   }, {
     "id" : "script_ops",
-    "line" : 117,
+    "line" : 120,
     "desc" : "视图层原子操作：调用内核改状态后，仅重绘受影响的单个单元格",
     "symbol" : "paintCell"
   }, {
     "id" : "script_ops_end",
-    "line" : 128,
+    "line" : 131,
     "desc" : "",
     "symbol" : "hitCellFromPoint"
   }, {
     "id" : "script_input",
-    "line" : 130,
+    "line" : 133,
     "desc" : "指针手势：按下命中行 / 列标签或单元格，拖动用 elementFromPoint 命中格，按模式分派；",
     "symbol" : "hitCellFromPoint"
   }, {
     "id" : "script_input_end",
-    "line" : 239,
+    "line" : 250,
     "desc" : "",
     "symbol" : "setMode"
   }, {
     "id" : "script_mode",
-    "line" : 241,
+    "line" : 252,
     "desc" : "模式切换与状态提示条",
     "symbol" : "setMode"
   }, {
     "id" : "script_mode_end",
-    "line" : 262,
+    "line" : 273,
     "desc" : "",
     "symbol" : "saveState"
   }, {
     "id" : "script_storage",
-    "line" : 264,
+    "line" : 275,
     "desc" : "localStorage 持久化：保存 / 载入 / 清空，并绑定工具栏按钮",
     "symbol" : "saveState"
   }, {
     "id" : "script_storage_end",
-    "line" : 315,
+    "line" : 326,
     "desc" : "",
     "symbol" : "init"
   }, {
     "id" : "script_init",
-    "line" : 317,
+    "line" : 328,
     "desc" : "初始化：构建网格、绑定事件、载入本地存档",
     "symbol" : "init"
   }, {
     "id" : "script_init_end",
-    "line" : 333,
+    "line" : 344,
     "desc" : ""
   } ],
   "selftest-core.js" : [ {
@@ -188,6 +212,31 @@
     "line" : 1,
     "desc" : "内核自测：验证 grid-core.js 的三层状态、选中并集、目标约束与序列化。",
     "symbol" : "test"
+  } ],
+  "selftest-view.js" : [ {
+    "id" : "selftest_view_intro",
+    "line" : 1,
+    "desc" : "视图层自测：用极简 DOM 桩 (无 jsdom) 在 Node 里加载 script.js，",
+    "symbol" : "test"
+  }, {
+    "id" : "selftest_view_dom",
+    "line" : 24,
+    "desc" : "极简 DOM 桩：仅实现 script.js 用到的 API（classList / dataset / closest / appendChild 等）",
+    "symbol" : "constructor"
+  }, {
+    "id" : "selftest_view_dom_end",
+    "line" : 110,
+    "desc" : "",
+    "symbol" : "loadScript"
+  }, {
+    "id" : "selftest_view_run",
+    "line" : 112,
+    "desc" : "载入 script.js 到隔离上下文，并返回可直接调用其顶层函数的沙箱",
+    "symbol" : "loadScript"
+  }, {
+    "id" : "selftest_view_run_end",
+    "line" : 246,
+    "desc" : ""
   } ],
   "style.css" : [ {
     "id" : "style_intro",
@@ -221,17 +270,17 @@
     "symbol" : ".grid"
   }, {
     "id" : "style_grid_end",
-    "line" : 138,
+    "line" : 145,
     "desc" : "",
     "symbol" : ".legend"
   }, {
     "id" : "style_legend",
-    "line" : 140,
+    "line" : 147,
     "desc" : "图例与状态提示条",
     "symbol" : ".legend"
   }, {
     "id" : "style_legend_end",
-    "line" : 161,
+    "line" : 168,
     "desc" : ""
   } ],
   "UPDATE.md" : [ {
@@ -251,8 +300,16 @@
     "line" : 27,
     "desc" : ""
   }, {
-    "id" : "update_tail",
+    "id" : "update_v3",
     "line" : 29,
+    "desc" : "# v3 · 选中模式支持任意选中 / 拖动选中"
+  }, {
+    "id" : "update_v3_end",
+    "line" : 38,
+    "desc" : ""
+  }, {
+    "id" : "update_tail",
+    "line" : 41,
     "desc" : "末尾锚点：请在锚点之前插入新纪录（position=before）"
   } ]
 }

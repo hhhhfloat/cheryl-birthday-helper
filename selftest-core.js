@@ -46,6 +46,16 @@ test('涂黑自动清除该格目标', () => {
   assert.strictEqual(g[1][1].target, false);
 });
 
+test('setSelected 支持任意单格选中 / 取消', () => {
+  const g = core.createState();
+  assert.strictEqual(core.setSelected(g, 2, 3, true), true);
+  assert.strictEqual(g[2][3].sel, true);
+  assert.strictEqual(g[2][2].sel, false);
+  assert.strictEqual(core.setSelected(g, 2, 3, true), false, '重复设置应返回未变更');
+  assert.strictEqual(core.setSelected(g, 2, 3, false), true);
+  assert.strictEqual(g[2][3].sel, false);
+});
+
 test('行选中 + 列选中 = 并集', () => {
   const g = core.createState();
   core.selectRow(g, 3);
