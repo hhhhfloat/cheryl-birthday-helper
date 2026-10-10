@@ -13,10 +13,11 @@ var MODES = ['paint', 'select', 'erase', 'target'];
 var STORAGE_KEY = 'cheryl-birthday-helper/v1';
 var MODE_HINTS = {
   paint: '涂色：点击或拖动格子，黑 / 白循环切换',
-  select: '选中：点击行 / 列标签选中整行 / 整列，效果叠加',
+  select: '选中：点击行 / 列标签选中整行 / 整列，效果叠加；按住鼠标右键拖动可擦除选中',
   erase: '消除：点击行 / 列标签或拖动格子取消选中',
   target: '目标：点击或拖动白色格子，用黄色标出目标'
 };
+
 // @anchor: script_config_end
 
 // @anchor: script_state
@@ -24,12 +25,14 @@ var MODE_HINTS = {
 var cells = Core.createState();
 var mode = 'paint';
 var pointerActive = false;
+var gestureErase = false;
 var brushColor = null;
 var brushTarget = null;
 var cellEls = [];
 var rowLabelEls = [];
 var colLabelEls = [];
 var statusTimer = null;
+
 // @anchor: script_state_end
 
 // @anchor: script_build
@@ -125,7 +128,8 @@ function markTarget(r, c, value) {
 // @anchor: script_ops_end
 
 // @anchor: script_input
-// 指针手势：按下命中行/列标签或单元格，拖动用 elementFromPoint 命中格，按模式分派
+// 指针手势：按下命中行 / 列标签或单元格，拖动用 elementFromPoint 命中格，按模式分派；
+// 选中模式下按鼠标右键按下 → 本次手势临时转为擦除（取消选中）
 function hitCellFromPoint(x, y) {
   var el = document.elementFromPoint(x, y);
   if (!el) return null;
@@ -136,7 +140,10 @@ function hitCellFromPoint(x, y) {
 
 function applyCellDown(r, c) {
   var st = cells[r][c];
-  if (mode === 'paint') {
+  if (gestureErase) {
+    selectCell(r, c, false);
+    pointerActive = true;
+  } else if (mode === 'paint') {
     brushColor = st.color === BLACK ? WHITE : BLACK;
     paintCell(r, c, brushColor);
     pointerActive = true;
@@ -145,21 +152,23 @@ function applyCellDown(r, c) {
     brushTarget = !st.target;
     markTarget(r, c, brushTarget);
     pointerActive = true;
-  } else if (mode === 'erase') {
-    selectCell(r, c, false);
-    pointerActive = true;
   }
 }
 
 function onPointerDown(e) {
-  if (e.pointerType === 'mouse' && e.button !== 0) return;
+  var rightButton = (e.pointerType === 'mouse' && e.button === 2);
+  var leftButton = (e.pointerType !== 'mouse') || e.button === 0;
+  var rightErase = rightButton && mode === 'select';
+  if (!leftButton && !rightErase) return;
+  gestureErase = (mode === 'erase') || rightErase;
+
   var t = e.target;
   var rowLabel = t.closest ? t.closest('.row-label') : null;
   var colLabel = t.closest ? t.closest('.col-label') : null;
   if (rowLabel || colLabel) {
     e.preventDefault();
     var axisEl = rowLabel || colLabel;
-    onAxisAction(axisEl.dataset.axis, Number(axisEl.dataset.index));
+    onAxisAction(axisEl.dataset.axis, Number(axisEl.dataset.index), gestureErase);
     return;
   }
   var cellEl = t.closest ? t.closest('.cell') : null;
@@ -179,14 +188,15 @@ function onPointerMove(e) {
   if (!pointerActive) return;
   var hit = hitCellFromPoint(e.clientX, e.clientY);
   if (!hit) return;
-  if (mode === 'paint' && brushColor) paintCell(hit.r, hit.c, brushColor);
+  if (gestureErase) selectCell(hit.r, hit.c, false);
+  else if (mode === 'paint' && brushColor) paintCell(hit.r, hit.c, brushColor);
   else if (mode === 'target' && brushTarget !== null) markTarget(hit.r, hit.c, brushTarget);
-  else if (mode === 'erase') selectCell(hit.r, hit.c, false);
 }
 
 function onPointerUp(e) {
   if (!pointerActive) return;
   pointerActive = false;
+  gestureErase = false;
   brushColor = null;
   brushTarget = null;
   renderLabels();
@@ -196,7 +206,12 @@ function onPointerUp(e) {
   }
 }
 
-function onAxisAction(axis, index) {
+function onAxisAction(axis, index, erase) {
+  if (erase || mode === 'erase') {
+    if (axis === 'row') Core.clearRow(cells, index); else Core.clearCol(cells, index);
+    renderAll();
+    return;
+  }
   if (mode === 'select') {
     var allSelected = axis === 'row'
       ? Core.isRowAllSelected(cells, index)
@@ -207,9 +222,6 @@ function onAxisAction(axis, index) {
       if (allSelected) Core.clearCol(cells, index); else Core.selectCol(cells, index);
     }
     renderAll();
-  } else if (mode === 'erase') {
-    if (axis === 'row') Core.clearRow(cells, index); else Core.clearCol(cells, index);
-    renderAll();
   } else {
     status('请在“选中”或“消除”模式下点击行 / 列标签');
   }
@@ -219,9 +231,11 @@ function bindPointerEvents() {
   var grid = document.getElementById('grid');
   grid.addEventListener('pointerdown', onPointerDown);
   grid.addEventListener('pointermove', onPointerMove);
+  grid.addEventListener('contextmenu', function (e) { e.preventDefault(); });
   window.addEventListener('pointerup', onPointerUp);
   window.addEventListener('pointercancel', onPointerUp);
 }
+
 // @anchor: script_input_end
 
 // @anchor: script_mode

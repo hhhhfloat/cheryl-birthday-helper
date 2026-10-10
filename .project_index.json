@@ -80,7 +80,7 @@
     "desc" : "颜色图例与状态提示条"
   }, {
     "id" : "html_legend_end",
-    "line" : 54,
+    "line" : 55,
     "desc" : ""
   } ],
   "PROJECT.md" : [ {
@@ -100,87 +100,87 @@
     "symbol" : "buildGrid"
   }, {
     "id" : "script_config_end",
-    "line" : 20,
+    "line" : 21,
     "desc" : "",
     "symbol" : "buildGrid"
   }, {
     "id" : "script_state",
-    "line" : 22,
+    "line" : 23,
     "desc" : "运行时状态：单元格二维数组（唯一数据源）+ 当前模式 + 手势上下文 + DOM 缓存",
     "symbol" : "buildGrid"
   }, {
     "id" : "script_state_end",
-    "line" : 33,
+    "line" : 36,
     "desc" : "",
     "symbol" : "buildGrid"
   }, {
     "id" : "script_build",
-    "line" : 35,
+    "line" : 38,
     "desc" : "构建网格 DOM：角落 + 列标签(数字) + 每行(行标签字母 + 单元格)，并缓存引用",
     "symbol" : "buildGrid"
   }, {
     "id" : "script_build_end",
-    "line" : 83,
+    "line" : 86,
     "desc" : "",
     "symbol" : "renderAll"
   }, {
     "id" : "script_render",
-    "line" : 85,
+    "line" : 88,
     "desc" : "状态 → 视图：刷新单元格三态样式与行 / 列标签激活态",
     "symbol" : "renderAll"
   }, {
     "id" : "script_render_end",
-    "line" : 112,
+    "line" : 115,
     "desc" : "",
     "symbol" : "paintCell"
   }, {
     "id" : "script_ops",
-    "line" : 114,
+    "line" : 117,
     "desc" : "视图层原子操作：调用内核改状态后，仅重绘受影响的单个单元格",
     "symbol" : "paintCell"
   }, {
     "id" : "script_ops_end",
-    "line" : 125,
+    "line" : 128,
     "desc" : "",
     "symbol" : "hitCellFromPoint"
   }, {
     "id" : "script_input",
-    "line" : 127,
-    "desc" : "指针手势：按下命中行/列标签或单元格，拖动用 elementFromPoint 命中格，按模式分派",
+    "line" : 130,
+    "desc" : "指针手势：按下命中行 / 列标签或单元格，拖动用 elementFromPoint 命中格，按模式分派；",
     "symbol" : "hitCellFromPoint"
   }, {
     "id" : "script_input_end",
-    "line" : 225,
+    "line" : 239,
     "desc" : "",
     "symbol" : "setMode"
   }, {
     "id" : "script_mode",
-    "line" : 227,
+    "line" : 241,
     "desc" : "模式切换与状态提示条",
     "symbol" : "setMode"
   }, {
     "id" : "script_mode_end",
-    "line" : 248,
+    "line" : 262,
     "desc" : "",
     "symbol" : "saveState"
   }, {
     "id" : "script_storage",
-    "line" : 250,
+    "line" : 264,
     "desc" : "localStorage 持久化：保存 / 载入 / 清空，并绑定工具栏按钮",
     "symbol" : "saveState"
   }, {
     "id" : "script_storage_end",
-    "line" : 301,
+    "line" : 315,
     "desc" : "",
     "symbol" : "init"
   }, {
     "id" : "script_init",
-    "line" : 303,
+    "line" : 317,
     "desc" : "初始化：构建网格、绑定事件、载入本地存档",
     "symbol" : "init"
   }, {
     "id" : "script_init_end",
-    "line" : 319,
+    "line" : 333,
     "desc" : ""
   } ],
   "selftest-core.js" : [ {
@@ -217,21 +217,21 @@
   }, {
     "id" : "style_grid",
     "line" : 70,
-    "desc" : "9×9 网格布局与单元格三态（黑白 / 选中 / 目标）样式",
+    "desc" : "9×9 网格布局与单元格三态（黑白 / 选中 / 目标）样式；方格无圆角、无间隙、紧密排列。",
     "symbol" : ".grid"
   }, {
     "id" : "style_grid_end",
-    "line" : 132,
+    "line" : 138,
     "desc" : "",
     "symbol" : ".legend"
   }, {
     "id" : "style_legend",
-    "line" : 134,
+    "line" : 140,
     "desc" : "图例与状态提示条",
     "symbol" : ".legend"
   }, {
     "id" : "style_legend_end",
-    "line" : 155,
+    "line" : 161,
     "desc" : ""
   } ],
   "UPDATE.md" : [ {
@@ -243,8 +243,16 @@
     "line" : 6,
     "desc" : "v1 · 首个可用版本"
   }, {
-    "id" : "update_tail",
+    "id" : "update_v2",
     "line" : 20,
+    "desc" : "v2 · 样式紧致化 + 右键擦除"
+  }, {
+    "id" : "update_v2_end",
+    "line" : 27,
+    "desc" : ""
+  }, {
+    "id" : "update_tail",
+    "line" : 29,
     "desc" : "末尾锚点：请在锚点之前插入新纪录（position=before）"
   } ]
 }
