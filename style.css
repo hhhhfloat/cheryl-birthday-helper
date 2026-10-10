@@ -144,6 +144,34 @@ body {
 
 /* @anchor: style_grid_end */
 
+/* @anchor: style_marks */
+/* 行列标记：行标签红底、列标签蓝底（各唯一）；并把「整行 / 整列选中」改为浅色底以与实色标记区分。 */
+:root { --mark-row: #e5484d; --mark-col: #1d4ed8; }
+
+/* 覆盖选中态：整行 / 整列选中用浅色底，示为辅助态 */
+.col-label.is-active, .row-label.is-active {
+  background: #dce8fd; color: var(--accent); border-color: var(--accent);
+}
+
+/* 标记态：实色底 + 白字 + 加粗，叠于选中态之上（同优先级、后定义生效） */
+.row-label.is-marked, .col-label.is-marked {
+  font-weight: 700; color: #fff;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .55);
+}
+.row-label.is-marked { background: var(--mark-row); border-color: var(--mark-row); }
+.col-label.is-marked { background: var(--mark-col); border-color: var(--mark-col); }
+
+/* 图例色块 */
+.swatch.mark-row { background: var(--mark-row); }
+.swatch.mark-col { background: var(--mark-col); }
+
+/* 标记模式：单元格不接收操作，坐标头可点 */
+.grid[data-mode="mark"] .cell { cursor: not-allowed; }
+.grid[data-mode="mark"] .row-label,
+.grid[data-mode="mark"] .col-label { cursor: pointer; }
+/* @anchor: style_marks_end */
+
+
 /* @anchor: style_legend */
 /* 图例与状态提示条 */
 .legend {

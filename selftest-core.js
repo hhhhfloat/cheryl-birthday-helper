@@ -1,5 +1,5 @@
 // @anchor: selftest_intro
-// 内核自测：验证 grid-core.js 的三层状态、选中并集、目标约束与序列化。
+// 内核自测：验证 grid-core.js 的三层状态、选中并集、目标约束、行列标记与序列化。
 // 运行：node cheryl-birthday-helper/selftest-core.js
 
 const assert = require('assert');
@@ -141,6 +141,55 @@ test('反序列化：黑格不保留目标', () => {
   assert.ok(g);
   assert.strictEqual(g[0][0].color, 'black');
   assert.strictEqual(g[0][0].target, false);
+});
+
+test('行列标记：唯一且可切换 / 清除', () => {
+  const m = core.createMarks();
+  assert.strictEqual(m.row, -1);
+  assert.strictEqual(m.col, -1);
+  assert.strictEqual(core.toggleMark(m, 'row', 3), true);
+  assert.strictEqual(m.row, 3);
+  assert.strictEqual(core.toggleMark(m, 'row', 5), true);
+  assert.strictEqual(m.row, 5, '标记唯一，新的行取代旧行');
+  assert.strictEqual(m.col, -1, '标记行不影响列');
+  assert.strictEqual(core.toggleMark(m, 'row', 5), true);
+  assert.strictEqual(m.row, -1, '再次点击同一行取消标记');
+  assert.strictEqual(core.toggleMark(m, 'col', 2), true);
+  assert.strictEqual(m.col, 2);
+  assert.strictEqual(core.isMarked(m, 'col', 2), true);
+  assert.strictEqual(core.isMarked(m, 'col', 3), false);
+  assert.strictEqual(core.clearMark(m, 'col'), true);
+  assert.strictEqual(m.col, -1);
+  assert.strictEqual(core.clearMark(m, 'col'), false, '已空时清除返回未变更');
+});
+
+test('行列标记：非法轴忽略', () => {
+  const m = core.createMarks();
+  assert.strictEqual(core.toggleMark(m, 'diag', 1), false);
+  assert.strictEqual(core.setMark(m, 'diag', 1), false);
+  assert.strictEqual(m.row, -1);
+});
+
+test('序列化往返：行列标记随存档保留', () => {
+  const g = core.createState();
+  const m = core.createMarks();
+  core.toggleMark(m, 'row', 6);
+  core.toggleMark(m, 'col', 1);
+  const data = core.serialize(g, m);
+  assert.strictEqual(data.v, 2);
+  const m2 = core.readMarks(data);
+  assert.strictEqual(m2.row, 6);
+  assert.strictEqual(m2.col, 1);
+});
+
+test('readMarks：旧数据 / 越界值回退为无标记', () => {
+  const old = core.readMarks({ v: 1, cells: [] });
+  assert.strictEqual(old.row, -1);
+  assert.strictEqual(old.col, -1);
+  const bad = core.readMarks({ mark: [99, -2] });
+  assert.strictEqual(bad.row, -1);
+  assert.strictEqual(bad.col, -1);
+  assert.strictEqual(core.readMarks(null).row, -1);
 });
 
 console.log('\n' + passed + ' passed, ' + failed + ' failed');

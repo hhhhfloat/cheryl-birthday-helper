@@ -9,23 +9,24 @@ var BLACK = Core.BLACK;
 var WHITE = Core.WHITE;
 var ROW_LABELS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 var COL_LABELS = ['1', '2', '3', '4', '5', '6', '7', '8'];
-var MODES = ['paint', 'select', 'erase', 'target'];
+var MODES = ['paint', 'select', 'erase', 'target', 'mark'];
 var STORAGE_KEY = 'cheryl-birthday-helper/v1';
 var MODE_HINTS = {
   paint: '涂色：点击或拖动格子，黑 / 白循环切换',
   select: '选中：点击 / 拖动格子任意选中（叠加行 / 列标签），按住鼠标右键拖动可擦除',
   erase: '消除：点击行 / 列标签或拖动格子取消选中',
-  target: '目标：点击或拖动白色格子，用黄色标出目标'
+  target: '目标：点击或拖动白色格子，用黄色标出目标',
+  mark: '标记：点击行标签标红（唯一一行）、点击列标签标蓝（唯一一列），再次点击取消；右键清除'
 };
-
 
 // @anchor: script_config_end
 
 // @anchor: script_state
 var brushSel = null;
 
-// 运行时状态：单元格二维数组（唯一数据源）+ 当前模式 + 手势上下文 + DOM 缓存
+// 运行时状态：单元格二维数组（唯一数据源）+ 行列标记 + 当前模式 + 手势上下文 + DOM 缓存
 var cells = Core.createState();
+var marks = Core.createMarks();
 var mode = 'paint';
 var pointerActive = false;
 var gestureErase = false;
@@ -89,12 +90,13 @@ function buildGrid() {
 // @anchor: script_build_end
 
 // @anchor: script_render
-// 状态 → 视图：刷新单元格三态样式与行 / 列标签激活态
+// 状态 → 视图：刷新单元格三态样式与行 / 列标签的选中 / 标记样式
 function renderAll() {
   for (var r = 0; r < SIZE; r++) {
     for (var c = 0; c < SIZE; c++) { renderCell(r, c); }
   }
   renderLabels();
+  renderMarks();
 }
 
 function renderCell(r, c) {
@@ -115,6 +117,17 @@ function renderLabels() {
     colLabelEls[c].classList.toggle('is-active', Core.isColAllSelected(cells, c));
   }
 }
+
+// 行列标记：红色行 / 蓝色列各至多一个（is-marked 由 .row-label / .col-label 分别着色）
+function renderMarks() {
+  for (var r = 0; r < SIZE; r++) {
+    rowLabelEls[r].classList.toggle('is-marked', Core.isMarked(marks, 'row', r));
+  }
+  for (var c = 0; c < SIZE; c++) {
+    colLabelEls[c].classList.toggle('is-marked', Core.isMarked(marks, 'col', c));
+  }
+}
+
 // @anchor: script_render_end
 
 // @anchor: script_ops
@@ -133,7 +146,8 @@ function markTarget(r, c, value) {
 // @anchor: script_input
 // 指针手势：按下命中行 / 列标签或单元格，拖动用 elementFromPoint 命中格，按模式分派；
 // 选中模式既可点击 / 拖动格子任意选中（以按下格的反相为画笔，拖动连续涂选），也可点行 / 列标签；
-// 选中 (或消除) 模式下按鼠标右键 → 本次手势临时转为擦除（取消选中）
+// 标记模式点击行 / 列标签设置唯一红行 / 蓝列标记；
+// 选中 / 消除 / 标记模式下按鼠标右键 → 本次手势临时转为擦除（取消选中 / 清除标记）
 function hitCellFromPoint(x, y) {
   var el = document.elementFromPoint(x, y);
   if (!el) return null;
@@ -160,13 +174,15 @@ function applyCellDown(r, c) {
     brushTarget = !st.target;
     markTarget(r, c, brushTarget);
     pointerActive = true;
+  } else if (mode === 'mark') {
+    status('标记模式：请点击网格外侧的行号（红）/ 列号（蓝）');
   }
 }
 
 function onPointerDown(e) {
   var rightButton = (e.pointerType === 'mouse' && e.button === 2);
   var leftButton = (e.pointerType !== 'mouse') || e.button === 0;
-  var rightErase = rightButton && (mode === 'select' || mode === 'erase');
+  var rightErase = rightButton && (mode === 'select' || mode === 'erase' || mode === 'mark');
   if (!leftButton && !rightErase) return;
   gestureErase = (mode === 'erase') || rightErase;
 
@@ -217,6 +233,19 @@ function onPointerUp(e) {
 }
 
 function onAxisAction(axis, index, erase) {
+  if (mode === 'mark') {
+    if (erase) {
+      Core.clearMark(marks, axis);
+      status('已清除该' + (axis === 'row' ? '行' : '列') + '标记');
+    } else {
+      Core.toggleMark(marks, axis, index);
+      status(axis === 'row'
+        ? (marks.row === index ? '已标记行 ' + ROW_LABELS[index] + '（红）' : '已取消行标记')
+        : (marks.col === index ? '已标记列 ' + COL_LABELS[index] + '（蓝）' : '已取消列标记'));
+    }
+    renderMarks();
+    return;
+  }
   if (erase || mode === 'erase') {
     if (axis === 'row') Core.clearRow(cells, index); else Core.clearCol(cells, index);
     renderAll();
@@ -276,7 +305,7 @@ function status(msg) {
 // localStorage 持久化：保存 / 载入 / 清空，并绑定工具栏按钮
 function saveState(silent) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(Core.serialize(cells)));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(Core.serialize(cells, marks)));
     if (!silent) status('已保存到本地存储');
     return true;
   } catch (err) {
@@ -294,6 +323,7 @@ function loadState() {
   var restored = Core.deserialize(parsed);
   if (!restored) return false;
   cells = restored;
+  marks = Core.readMarks(parsed);
   return true;
 }
 
@@ -317,12 +347,19 @@ function bindToolbar() {
     renderAll();
     status('已清空目标层');
   });
+  document.getElementById('btn-clear-mark').addEventListener('click', function () {
+    Core.clearMarks(marks);
+    renderMarks();
+    status('已清空行列标记');
+  });
   document.getElementById('btn-reset').addEventListener('click', function () {
     cells = Core.createState();
+    marks = Core.createMarks();
     renderAll();
-    status('已重置：全黑题面、无选中、无目标（未写入存储）');
+    status('已重置：全黑题面、无选中、无目标、无标记（未写入存储）');
   });
 }
+
 // @anchor: script_storage_end
 
 // @anchor: script_init

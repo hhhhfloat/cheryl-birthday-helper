@@ -38,5 +38,16 @@
 <!-- @anchor: update_v3_end -->
 
 
+<!-- @anchor: update_v4 -->
+## v4 · 新增行列标记（红行 / 蓝列，各唯一）
+- **内核（grid-core.js）**：新增标记模块 `createMarks / toggleMark / setMark / clearMark / clearMarks / isMarked`，以 `{ row, col }`（-1 表示无）保证每轴唯一；`serialize` 升级为 **v2** 并携带 `mark`，新增 `readMarks` 从存档还原（旧 v1 / 越界值回退为无标记）。
+- **交互（script.js）**：新增「标记」模式；`marks` 与 `cells` 并列作为状态；`renderMarks` 刷新标签标记类；标记模式下点击行标签标红、列标签标蓝，再次点击取消、点其它轴即替换；右键清除该轴标记；标记模式下点击单元格不改动任何状态（仅提示）。
+- **样式 / 外壳**：行标签红底、列标签蓝底（白字加粗）；「整行 / 整列选中」由实色改为浅蓝底，以与标记实色区分；新增「清空标记」按钮与图例色块。
+- **持久化**：标记随「保存 / 载入」一并存取，`重置全部` 同时清空标记。
+- **测试**：`selftest-core.js` 补 4 项标记用例（16 项全通过）；`selftest-view.js` 补 5 项标记交互与持久化用例（16 项全通过）。
+<!-- @anchor: update_v4_end -->
+
+
+
 <!-- @anchor: update_tail -->
 <!-- 末尾锚点：请在锚点之前插入新纪录（position=before） -->

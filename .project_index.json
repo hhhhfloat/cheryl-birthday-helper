@@ -2,7 +2,7 @@
   "grid-core.js" : [ {
     "id" : "core_intro",
     "line" : 1,
-    "desc" : "纯逻辑内核：8×8 网格三层状态（color / sel / target）与选中并集、目标约束、序列化。",
+    "desc" : "纯逻辑内核：8×8 网格三层状态（color / sel / target）+ 行列标记与选中并集、目标约束、序列化。",
     "symbol" : "createState"
   }, {
     "id" : "core_config",
@@ -11,47 +11,57 @@
     "symbol" : "createState"
   }, {
     "id" : "core_config_end",
-    "line" : 19,
+    "line" : 20,
     "desc" : "",
     "symbol" : "createState"
   }, {
     "id" : "core_create",
-    "line" : 21,
+    "line" : 22,
     "desc" : "创建初始状态：全黑、无选中、无目标",
     "symbol" : "createState"
   }, {
     "id" : "core_create_end",
-    "line" : 34,
+    "line" : 35,
     "desc" : "",
     "symbol" : "isRowAllSelected"
   }, {
     "id" : "core_query",
-    "line" : 37,
+    "line" : 38,
     "desc" : "行 / 列是否已整行、整列被选中（驱动坐标头激活态与切换判断）",
     "symbol" : "isRowAllSelected"
   }, {
     "id" : "core_query_end",
-    "line" : 47,
+    "line" : 48,
     "desc" : "",
     "symbol" : "setColor"
   }, {
     "id" : "core_ops",
-    "line" : 49,
+    "line" : 50,
     "desc" : "单格与整行/整列操作；返回是否实际变更，调用方据此决定重绘范围。",
     "symbol" : "setColor"
   }, {
     "id" : "core_ops_end",
-    "line" : 102,
+    "line" : 103,
+    "desc" : "",
+    "symbol" : "toggleMark"
+  }, {
+    "id" : "core_marks",
+    "line" : 105,
+    "desc" : "行列标记：红色标行、蓝色标列，各至多一个（唯一），独立于单元格三层状态。",
+    "symbol" : "toggleMark"
+  }, {
+    "id" : "core_marks_end",
+    "line" : 138,
     "desc" : "",
     "symbol" : "serialize"
   }, {
     "id" : "core_serialize",
-    "line" : 104,
+    "line" : 140,
     "desc" : "序列化 / 反序列化：紧凑三元组 [是否白, 是否选中, 是否目标]；非法数据返回 null。",
     "symbol" : "serialize"
   }, {
     "id" : "core_serialize_end",
-    "line" : 133,
+    "line" : 181,
     "desc" : ""
   } ],
   "index.html" : [ {
@@ -64,23 +74,23 @@
     "desc" : "模式切换与操作按钮组，行为由 script.js 绑定"
   }, {
     "id" : "html_toolbar_end",
-    "line" : 35,
+    "line" : 38,
     "desc" : ""
   }, {
     "id" : "html_grid",
-    "line" : 37,
+    "line" : 40,
     "desc" : "9×9 网格容器（角落 + 8 列标签 + 8 行标签 + 64 单元格），由 script.js 构建"
   }, {
     "id" : "html_grid_end",
-    "line" : 42,
+    "line" : 45,
     "desc" : ""
   }, {
     "id" : "html_legend",
-    "line" : 44,
+    "line" : 47,
     "desc" : "颜色图例与状态提示条"
   }, {
     "id" : "html_legend_end",
-    "line" : 56,
+    "line" : 60,
     "desc" : ""
   } ],
   "PROJECT.md" : [ {
@@ -90,26 +100,26 @@
   }, {
     "id" : "project_layers",
     "line" : 8,
-    "desc" : "三层状态模型与设计决策——修改内核语义前必读"
+    "desc" : "层状态模型与设计决策——修改内核语义前必读"
   }, {
     "id" : "project_interaction",
-    "line" : 25,
+    "line" : 28,
     "desc" : "交互约定：模式、坐标头、指针手势"
   }, {
     "id" : "project_storage",
-    "line" : 32,
+    "line" : 36,
     "desc" : "持久化约定：键名、保存范围、入口"
   }, {
     "id" : "project_testing",
-    "line" : 38,
+    "line" : 43,
     "desc" : "测试与运行方式"
   }, {
     "id" : "project_files",
-    "line" : 45,
+    "line" : 50,
     "desc" : "文件清单"
   }, {
     "id" : "project_tail",
-    "line" : 52,
+    "line" : 57,
     "desc" : "末尾锚点：新增章节请插入到此处之前（position=before）"
   } ],
   "script.js" : [ {
@@ -134,83 +144,83 @@
     "symbol" : "buildGrid"
   }, {
     "id" : "script_state_end",
-    "line" : 39,
+    "line" : 40,
     "desc" : "",
     "symbol" : "buildGrid"
   }, {
     "id" : "script_build",
-    "line" : 41,
+    "line" : 42,
     "desc" : "构建网格 DOM：角落 + 列标签(数字) + 每行(行标签字母 + 单元格)，并缓存引用",
     "symbol" : "buildGrid"
   }, {
     "id" : "script_build_end",
-    "line" : 89,
+    "line" : 90,
     "desc" : "",
     "symbol" : "renderAll"
   }, {
     "id" : "script_render",
-    "line" : 91,
-    "desc" : "状态 → 视图：刷新单元格三态样式与行 / 列标签激活态",
+    "line" : 92,
+    "desc" : "状态 → 视图：刷新单元格三态样式与行 / 列标签的选中 / 标记样式",
     "symbol" : "renderAll"
   }, {
     "id" : "script_render_end",
-    "line" : 118,
+    "line" : 131,
     "desc" : "",
     "symbol" : "paintCell"
   }, {
     "id" : "script_ops",
-    "line" : 120,
+    "line" : 133,
     "desc" : "视图层原子操作：调用内核改状态后，仅重绘受影响的单个单元格",
     "symbol" : "paintCell"
   }, {
     "id" : "script_ops_end",
-    "line" : 131,
+    "line" : 144,
     "desc" : "",
     "symbol" : "hitCellFromPoint"
   }, {
     "id" : "script_input",
-    "line" : 133,
+    "line" : 146,
     "desc" : "指针手势：按下命中行 / 列标签或单元格，拖动用 elementFromPoint 命中格，按模式分派；",
     "symbol" : "hitCellFromPoint"
   }, {
     "id" : "script_input_end",
-    "line" : 250,
+    "line" : 279,
     "desc" : "",
     "symbol" : "setMode"
   }, {
     "id" : "script_mode",
-    "line" : 252,
+    "line" : 281,
     "desc" : "模式切换与状态提示条",
     "symbol" : "setMode"
   }, {
     "id" : "script_mode_end",
-    "line" : 273,
+    "line" : 302,
     "desc" : "",
     "symbol" : "saveState"
   }, {
     "id" : "script_storage",
-    "line" : 275,
+    "line" : 304,
     "desc" : "localStorage 持久化：保存 / 载入 / 清空，并绑定工具栏按钮",
     "symbol" : "saveState"
   }, {
     "id" : "script_storage_end",
-    "line" : 326,
+    "line" : 363,
     "desc" : "",
     "symbol" : "init"
   }, {
     "id" : "script_init",
-    "line" : 328,
+    "line" : 365,
     "desc" : "初始化：构建网格、绑定事件、载入本地存档",
     "symbol" : "init"
   }, {
     "id" : "script_init_end",
-    "line" : 344,
+    "line" : 381,
     "desc" : ""
   } ],
   "selftest-core.js" : [ {
     "id" : "selftest_intro",
     "line" : 1,
-    "desc" : "内核自测：验证 grid-core.js 的三层状态、选中并集、目标约束与序列化。",
+    "desc" : "内核自测：验证 grid-core.js 的三层状态、选中并集、目标约束、行列标记与序列化。",
     "symbol" : "test"
   } ],
   "selftest-view.js" : [ {
@@ -235,7 +245,7 @@
     "symbol" : "loadScript"
   }, {
     "id" : "selftest_view_run_end",
-    "line" : 246,
+    "line" : 305,
     "desc" : ""
   } ],
   "style.css" : [ {
@@ -274,13 +284,23 @@
     "desc" : "",
     "symbol" : ".legend"
   }, {
-    "id" : "style_legend",
+    "id" : "style_marks",
     "line" : 147,
+    "desc" : "行列标记：行标签红底、列标签蓝底（各唯一）；并把「整行 / 整列选中」改为浅色底以与实色标记区分。",
+    "symbol" : ".legend"
+  }, {
+    "id" : "style_marks_end",
+    "line" : 172,
+    "desc" : "",
+    "symbol" : ".legend"
+  }, {
+    "id" : "style_legend",
+    "line" : 175,
     "desc" : "图例与状态提示条",
     "symbol" : ".legend"
   }, {
     "id" : "style_legend_end",
-    "line" : 168,
+    "line" : 196,
     "desc" : ""
   } ],
   "UPDATE.md" : [ {
@@ -308,8 +328,16 @@
     "line" : 38,
     "desc" : ""
   }, {
-    "id" : "update_tail",
+    "id" : "update_v4",
     "line" : 41,
+    "desc" : "# v4 · 新增行列标记（红行 / 蓝列，各唯一）"
+  }, {
+    "id" : "update_v4_end",
+    "line" : 48,
+    "desc" : ""
+  }, {
+    "id" : "update_tail",
+    "line" : 52,
     "desc" : "末尾锚点：请在锚点之前插入新纪录（position=before）"
   } ]
 }

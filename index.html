@@ -23,15 +23,18 @@
       <button class="mode-btn" type="button" data-mode="select">选中</button>
       <button class="mode-btn" type="button" data-mode="erase">消除</button>
       <button class="mode-btn" type="button" data-mode="target">目标</button>
+      <button class="mode-btn" type="button" data-mode="mark">标记</button>
     </div>
     <div class="tool-group" role="group" aria-label="操作">
       <button class="action-btn primary" type="button" id="btn-save">保存</button>
       <button class="action-btn" type="button" id="btn-load">载入</button>
       <button class="action-btn" type="button" id="btn-clear-sel">清空选中</button>
       <button class="action-btn" type="button" id="btn-clear-target">清空目标</button>
+      <button class="action-btn" type="button" id="btn-clear-mark">清空标记</button>
       <button class="action-btn" type="button" id="btn-reset">重置全部</button>
     </div>
   </section>
+
   <!-- @anchor: html_toolbar_end -->
 
   <!-- @anchor: html_grid -->
@@ -48,10 +51,11 @@
     <span><i class="swatch white"></i>涂白（题面）</span>
     <span><i class="swatch sel"></i>选中（点击 / 拖动 · 右键擦除）</span>
     <span><i class="swatch target"></i>目标（黄色）</span>
+    <span><i class="swatch mark-row"></i>标记行（红 · 唯一）</span>
+    <span><i class="swatch mark-col"></i>标记列（蓝 · 唯一）</span>
   </section>
 
   <p class="status" id="status" role="status" aria-live="polite"></p>
-
 
   <!-- @anchor: html_legend_end -->
 </main>

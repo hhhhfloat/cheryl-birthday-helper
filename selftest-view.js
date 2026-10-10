@@ -1,6 +1,6 @@
 // @anchor: selftest_view_intro
 // 视图层自测：用极简 DOM 桩 (无 jsdom) 在 Node 里加载 script.js，
-// 模拟 pointer 事件验证涂抹 / 任意选中拖动 / 行列并集 / 右键擦除 / 持久化。
+// 模拟 pointer 事件验证涂抹 / 任意选中拖动 / 行列并集 / 右键擦除 / 行列标记 / 持久化。
 // 运行：node cheryl-birthday-helper/selftest-view.js
 const fs = require('fs');
 const path = require('path');
@@ -70,9 +70,9 @@ function makeEnv() {
   const byId = {};
   const grid = new El('div'); byId.grid = grid;
   const status = new El('p'); byId.status = status;
-  ['btn-save', 'btn-load', 'btn-clear-sel', 'btn-clear-target', 'btn-reset']
+  ['btn-save', 'btn-load', 'btn-clear-sel', 'btn-clear-target', 'btn-clear-mark', 'btn-reset']
     .forEach((id) => { byId[id] = new El('button'); });
-  const modeBtns = ['paint', 'select', 'erase', 'target'].map((m) => {
+  const modeBtns = ['paint', 'select', 'erase', 'target', 'mark'].map((m) => {
     const b = new El('button'); b.dataset.mode = m; return b;
   });
 
@@ -129,6 +129,11 @@ function move(sb, r, c) {
   sb.onPointerMove({ clientX: 0, clientY: 0, pointerId: 1 });
 }
 function up(sb) { sb.onPointerUp({ pointerId: 1 }); }
+// 点击坐标头（行 / 列标签），button 传 2 模拟鼠标右键
+function label(sb, el, button) {
+  sb.onPointerDown({ target: el, pointerType: 'mouse', button: button || 0, pointerId: 1, preventDefault: () => { } });
+  sb.onPointerUp({ pointerId: 1 });
+}
 
 function run() {
   const sb = loadScript(makeEnv());
@@ -176,10 +181,8 @@ function run() {
 
   test('选中：行 / 列标签取并集', () => {
     const g = sb.cells;
-    sb.onPointerDown({ target: sb.rowLabelEls[0], pointerType: 'mouse', button: 0, pointerId: 1, preventDefault: () => { } });
-    sb.onPointerUp({ pointerId: 1 });
-    sb.onPointerDown({ target: sb.colLabelEls[5], pointerType: 'mouse', button: 0, pointerId: 1, preventDefault: () => { } });
-    sb.onPointerUp({ pointerId: 1 });
+    label(sb, sb.rowLabelEls[0], 0);
+    label(sb, sb.colLabelEls[5], 0);
     eq(g[0][7].sel, true, '整行选中');
     eq(g[7][5].sel, true, '整列选中');
     eq(g[0][5].sel, true, '交叠格为选中');
@@ -203,8 +206,7 @@ function run() {
 
   test('选中模式右键点行标签：清整行选中', () => {
     const g = sb.cells;
-    sb.onPointerDown({ target: sb.rowLabelEls[0], pointerType: 'mouse', button: 2, pointerId: 1, preventDefault: () => { } });
-    sb.onPointerUp({ pointerId: 1 });
+    label(sb, sb.rowLabelEls[0], 2);
     eq(g[0][0].sel, false, '整行选中应被清空');
     eq(g[7][5].sel, true, '列选中不受影响');
   });
@@ -240,11 +242,67 @@ function run() {
     eq(sb.cells[5][1].target, true, '还原目标');
     eq(sb.cells[5][6].sel, true, '还原选中');
   });
+
+  test('标记：点击行标签标红且唯一，再点取消', () => {
+    sb.Core.clearMarks(sb.marks);
+    sb.setMode('mark');
+    label(sb, sb.rowLabelEls[2], 0);
+    eq(sb.marks.row, 2, '标记行 2');
+    eq(sb.marks.col, -1, '列未被标记');
+    label(sb, sb.rowLabelEls[5], 0);
+    eq(sb.marks.row, 5, '唯一：新的行取代旧行');
+    label(sb, sb.rowLabelEls[5], 0);
+    eq(sb.marks.row, -1, '再次点击同一行取消标记');
+  });
+
+  test('标记：列标签标蓝且唯一，行列互不影响', () => {
+    sb.Core.clearMarks(sb.marks);
+    label(sb, sb.rowLabelEls[1], 0);
+    label(sb, sb.colLabelEls[3], 0);
+    eq(sb.marks.row, 1);
+    eq(sb.marks.col, 3);
+    label(sb, sb.colLabelEls[7], 0);
+    eq(sb.marks.col, 7, '列标记唯一');
+    eq(sb.marks.row, 1, '行标记不受影响');
+  });
+
+  test('标记：右键清除对应轴标记', () => {
+    // 承接上例：row=1, col=7
+    label(sb, sb.rowLabelEls[1], 2);
+    eq(sb.marks.row, -1, '右键清除行标记');
+    eq(sb.marks.col, 7, '列标记不受影响');
+    label(sb, sb.colLabelEls[7], 2);
+    eq(sb.marks.col, -1, '右键清除列标记');
+  });
+
+  test('标记：点击单元格不改变涂色 / 选中 / 标记', () => {
+    sb.Core.clearMarks(sb.marks);
+    sb.setMode('mark');
+    const st = sb.cells[0][0];
+    const snapshot = { color: st.color, sel: st.sel, target: st.target };
+    down(sb, 0, 0); up(sb);
+    eq(st.color, snapshot.color, '涂色不应改变');
+    eq(st.sel, snapshot.sel, '选中不应改变');
+    eq(st.target, snapshot.target, '目标不应改变');
+    eq(sb.marks.row, -1, '不应产生行标记');
+  });
+
+  test('持久化：行列标记随保存 / 载入还原', () => {
+    sb.setMode('mark');
+    label(sb, sb.rowLabelEls[4], 0);
+    label(sb, sb.colLabelEls[6], 0);
+    eq(sb.saveState(true), true, '保存应成功');
+    label(sb, sb.rowLabelEls[4], 0);   // 破坏
+    label(sb, sb.colLabelEls[6], 0);   // 破坏
+    eq(sb.marks.row, -1);
+    eq(sb.marks.col, -1);
+    eq(sb.loadState(), true, '载入应成功');
+    eq(sb.marks.row, 4, '还原行标记');
+    eq(sb.marks.col, 6, '还原列标记');
+  });
 }
 
-
 // @anchor: selftest_view_run_end
-
 run();
 console.log('\n' + passed + ' passed, ' + failed + ' failed');
 if (failed > 0) { process.exitCode = 1; }
